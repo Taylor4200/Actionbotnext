@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove or comment out any usage of the 'border-border' class, for example: */
+/* .border-border { border-color: hsl(var(--border)); } */
+
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 267 75% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+  --radius: 1rem;
+
+  --glow-purple: 267 75% 42%;
+  --glow-indigo: 238 84% 57%;
+  --glow-teal: 174 83% 31%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-[#0f0f0f] text-foreground;
+  }
+}
+
+@layer components {
+  .glow-purple {
+    box-shadow: 0 0 15px 2px rgba(109, 40, 217, 0.3);
+  }
+
+  .glow-indigo {
+    box-shadow: 0 0 15px 2px rgba(79, 70, 229, 0.3);
+  }
+  
+  .glow-teal {
+    box-shadow: 0 0 15px 2px rgba(13, 148, 136, 0.3);
+  }
+
+  .blur-navbar {
+    @apply backdrop-blur-md bg-[#0f0f0f]/70;
+  }
+
+  .particles-container {
+    @apply absolute top-0 left-0 w-full h-full overflow-hidden z-0;
+  }
+  
+  .particle {
+    @apply absolute rounded-full opacity-30;
+    background: linear-gradient(180deg, rgba(109, 40, 217, 0.6), rgba(79, 70, 229, 0.3));
+    animation-name: float-particle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float-particle {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(15px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
