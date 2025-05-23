@@ -28,6 +28,9 @@ export default function Navbar() {
             setActiveSection(section);
             break;
           }
+        } else {
+          // Fallback for when element is not found, e.g., on other pages
+          setActiveSection("none"); // Or some other indicator that no section is active
         }
       }
     };

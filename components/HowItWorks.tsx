@@ -67,7 +67,7 @@ export default function HowItWorks() {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, type: "spring", stiffness: 100 }}
             viewport={{ once: true }}
             className="text-3xl md:text-4xl font-bold mb-4"
           >
@@ -76,7 +76,7 @@ export default function HowItWorks() {
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.7, delay: 0.1, type: "spring", stiffness: 100 }}
             viewport={{ once: true }}
             className="text-gray-400 max-w-2xl mx-auto"
           >

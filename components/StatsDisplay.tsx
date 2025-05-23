@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { getStats, formatNumber, SiteStats } from "@/lib/stats";
 import { ChartBar, Users, Clock, BarChart3, Star } from "lucide-react";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 // Animated number counter component with smooth scroll-triggered animation
 function CountUpNumber({ 
@@ -21,29 +23,11 @@ function CountUpNumber({
   decimals?: number;
 }) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   
   useEffect(() => {
-    const handleScroll = () => {
-      const element = document.getElementById('stats-section');
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight * 0.8;
-        
-        if (isVisible && !hasAnimated) {
-          setHasAnimated(true);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial scroll position
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasAnimated]);
-  
-  useEffect(() => {
-    if (hasAnimated && count < end) {
+    if (isInView && count < end) {
       // Calculate increment amount based on duration
       const increment = end / (duration / 50);
       const timer = setTimeout(() => {
@@ -52,7 +36,7 @@ function CountUpNumber({
       }, 50);
       return () => clearTimeout(timer);
     }
-  }, [count, end, duration, hasAnimated]);
+  }, [count, end, duration, isInView]);
   
   // Format the number with appropriate decimal places
   const formattedNumber = decimals > 0 
@@ -60,7 +44,7 @@ function CountUpNumber({
     : Math.floor(count).toString();
     
   return (
-    <span className="inline-block will-change-transform">
+    <span ref={ref} className="inline-block will-change-transform">
       {prefix}{formattedNumber}{suffix}
     </span>
   );

@@ -145,9 +145,9 @@ export default function Footer() {
               <FooterLink href="#features">Features</FooterLink>
               <FooterLink href="#pricing">Pricing</FooterLink>
               <FooterLink href="#platforms">Integrations</FooterLink>
-              <FooterLink href="#">Changelog</FooterLink>
-              <FooterLink href="#">Roadmap</FooterLink>
-              <FooterLink href="#">Beta Program</FooterLink>
+              <FooterLink href="/changelog">Changelog</FooterLink>
+              <FooterLink href="/roadmap">Roadmap</FooterLink>
+              <FooterLink href="/beta">Beta Program</FooterLink>
             </ul>
           </motion.div>
           
@@ -160,12 +160,12 @@ export default function Footer() {
           >
             <ColumnHeader>Resources</ColumnHeader>
             <ul className="space-y-3">
-              <FooterLink href="#">Documentation</FooterLink>
-              <FooterLink href="#">API Reference</FooterLink>
-              <FooterLink href="#">Tutorials</FooterLink>
-              <FooterLink href="#">Blog</FooterLink>
-              <FooterLink href="#">Community</FooterLink>
-              <FooterLink href="#">Help Center</FooterLink>
+              <FooterLink href="/documentation">Documentation</FooterLink>
+              <FooterLink href="/documentation/api">API Reference</FooterLink>
+              <FooterLink href="/tutorials">Tutorials</FooterLink>
+              <FooterLink href="/blog">Blog</FooterLink>
+              <FooterLink href="/community">Community</FooterLink>
+              <FooterLink href="/help">Help Center</FooterLink>
             </ul>
           </motion.div>
           
@@ -178,19 +178,19 @@ export default function Footer() {
           >
             <ColumnHeader>Company</ColumnHeader>
             <ul className="space-y-3 mb-8">
-              <FooterLink href="#">About Us</FooterLink>
-              <FooterLink href="#">Careers</FooterLink>
-              <FooterLink href="#">Contact</FooterLink>
-              <FooterLink href="#">Press Kit</FooterLink>
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/careers">Careers</FooterLink>
+              <FooterLink href="/contact">Contact</FooterLink>
+              <FooterLink href="/press">Press Kit</FooterLink>
             </ul>
             
             <ColumnHeader>Legal</ColumnHeader>
             <ul className="space-y-3">
-              <FooterLink href="#">
+              <FooterLink href="/privacy">
                 <Lock className="w-3.5 h-3.5 mr-1.5" />
                 Privacy Policy
               </FooterLink>
-              <FooterLink href="#">
+              <FooterLink href="/terms">
                 <FileText className="w-3.5 h-3.5 mr-1.5" />
                 Terms of Service
               </FooterLink>

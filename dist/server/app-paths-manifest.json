@@ -1,3 +1,7 @@
 {
-  "/[[...slug]]/page": "app/[[...slug]]/page.js"
+  "/[[...slug]]/page": "app/[[...slug]]/page.js",
+  "/documentation/api/page": "app/documentation/api/page.js",
+  "/tutorials/page": "app/tutorials/page.js",
+  "/documentation/page": "app/documentation/page.js",
+  "/about/page": "app/about/page.js"
 }

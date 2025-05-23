@@ -24,32 +24,35 @@ function Feature({ icon, title, description, color, delay }: FeatureProps) {
       }}
       viewport={{ once: true, margin: "-50px" }}
       whileHover={{ 
-        y: -10,
-        transition: { duration: 0.3, type: "spring", stiffness: 400 }
+        y: -5,
+        scale: 1.03,
+        transition: { duration: 0.15, type: "spring", stiffness: 600 }
       }}
-      className="group bg-[#171717] rounded-2xl p-6 border border-gray-800 hover:border-gray-700 transition-all duration-300 relative overflow-hidden"
+      className="group bg-[#171717] rounded-2xl p-6 border border-gray-800 hover:border-gray-700 transition-all duration-150 relative overflow-hidden will-change-transform"
     >
       {/* Background gradient */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600/0 via-purple-600/0 to-indigo-600/0 group-hover:from-purple-600/20 group-hover:via-purple-600/10 group-hover:to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600/0 via-purple-600/0 to-indigo-600/0 group-hover:from-purple-600/20 group-hover:via-purple-600/10 group-hover:to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-all duration-200"></div>
       
       {/* Content */}
       <div className="relative z-10">
         <motion.div 
           initial={{ scale: 1 }}
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: "spring", stiffness: 400 }}
-          className={`bg-[#262626] w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:shadow-${color.split('-')[0]}-500/30 transition-all duration-300`}
+          whileHover={{ scale: 1.05, rotate: 3 }}
+          transition={{ type: "spring", stiffness: 500 }}
+          className={`bg-[#262626] w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg group-hover:shadow-${color.split('-')[0]}-500/30 transition-all duration-150`}
         >
           <motion.div 
             className={`text-${color}`}
-            animate={{ 
-              rotate: [0, 0, 0, 0, 0],
-              scale: [1, 1.05, 1.1, 1.05, 1] 
+            animate={{
+              // No continuous animation
             }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity,
-              repeatType: "mirror"
+            transition={{
+              // No continuous transition
+            }}
+            whileHover={{
+              scale: 1.05,
+              rotate: 5,
+              transition: { duration: 0.2, type: "spring", stiffness: 500 }
             }}
           >
             {icon}
@@ -59,16 +62,16 @@ function Feature({ icon, title, description, color, delay }: FeatureProps) {
         <motion.h3 
           className="text-xl font-bold mb-3 text-white"
           initial={{ x: 0 }}
-          whileHover={{ x: 5 }}
-          transition={{ duration: 0.3 }}
+          whileHover={{ x: 3 }}
+          transition={{ duration: 0.15 }}
         >
           {title}
         </motion.h3>
         
-        <p className="text-gray-300 group-hover:text-gray-200 transition-colors duration-300">{description}</p>
+        <p className="text-gray-300 group-hover:text-gray-200 transition-colors duration-150">{description}</p>
         
         {/* Animated bottom border */}
-        <div className={`absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-${color.split('-')[0]}-500 to-indigo-500 group-hover:w-full transition-all duration-700 ease-in-out`}></div>
+        <div className={`absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-${color.split('-')[0]}-500 to-indigo-500 group-hover:w-full transition-all duration-200 ease-in-out`}></div>
       </div>
     </motion.div>
   );

@@ -3,35 +3,6 @@
 import { motion } from "framer-motion";
 import { Check, X, Zap, Shield, Clock, Sparkles } from "lucide-react";
 import GlowButton from "@/components/ui/GlowButton";
-import { useState, useEffect } from "react";
-import StatsDisplay from "@/components/StatsDisplay";
-
-// We now have a dedicated stats component that handles this data
-
-// Animated number counter component
-function CountUpNumber({ end, duration = 2000, prefix = "", suffix = "" }: { end: number, duration?: number, prefix?: string, suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const increment = Math.ceil(end / (duration / 50)); // Update every 50ms
-  
-  useEffect(() => {
-    if (count < end) {
-      const timer = setTimeout(() => {
-        const nextCount = count + increment;
-        setCount(nextCount > end ? end : nextCount);
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [count, end, increment]);
-  
-  // Format number with commas
-  const formattedNumber = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  
-  return (
-    <span className="inline-block">
-      {prefix}{formattedNumber}{suffix}
-    </span>
-  );
-}
 
 interface PricingTierProps {
   name: string;
@@ -67,10 +38,11 @@ function PricingTier({
       }}
       viewport={{ once: true, margin: "-50px" }}
       whileHover={{ 
-        y: -5,
-        transition: { type: "spring", stiffness: 300, damping: 10 }
+        y: -3,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 500, damping: 18 }
       }}
-      className={`bg-[#0f0f0f] rounded-2xl p-8 border ${isPopular ? 'border-purple-600 shadow-lg shadow-purple-900/10' : 'border-gray-800'} transition-all duration-300 hover:border-purple-600 hover:shadow-lg will-change-transform relative ${isPopular ? 'md:-translate-y-4' : ''}`}
+      className={`bg-[#0f0f0f] rounded-2xl p-8 border ${isPopular ? 'border-purple-600 shadow-lg shadow-purple-900/10' : 'border-gray-800'} transition-all duration-150 hover:border-purple-600 hover:shadow-lg will-change-transform relative ${isPopular ? 'md:-translate-y-4' : ''}`}
     >
       {/* Popular badge - placed higher to prevent overlap with gradient */}
       {isPopular && (
@@ -120,8 +92,8 @@ function PricingTier({
           >
             {feature.available ? (
               <motion.div 
-                whileHover={{ scale: 1.2 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 600 }}
                 className="text-green-500 mr-2 flex-shrink-0 mt-0.5"
               >
                 <Check className="w-5 h-5" />
@@ -272,11 +244,6 @@ export default function Pricing() {
               delay={index * 0.2}
             />
           ))}
-        </div>
-        
-        {/* Stats section - using our new component */}
-        <div className="mt-10">
-          <StatsDisplay />
         </div>
         
         {/* FAQ Section */}

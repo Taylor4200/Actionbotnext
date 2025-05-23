@@ -27,35 +27,36 @@ function PlatformCard({ name, icon, description, color, delay }: PlatformCardPro
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={{ 
-        y: -5, 
-        scale: 1.05
+        y: -3,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 500 }
       }}
       transition={{ 
         duration: 0.5, 
         delay: delay,
         type: "spring",
-        stiffness: 300
+        stiffness: 400
       }}
       viewport={{ once: true }}
-      className={`group relative w-full h-32 md:h-40 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center p-4 border border-gray-800 transition-all duration-300 overflow-hidden will-change-transform`}
+      className={`group relative w-full h-32 md:h-40 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center p-4 border border-gray-800 transition-all duration-150 overflow-hidden will-change-transform`}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/30 z-0"></div>
       
-      <div className={`z-10 mb-2 w-12 h-12 bg-[#262626] rounded-full flex items-center justify-center border border-gray-700 group-hover:border-${color}-500 transition-all duration-300`}>
+      <div className={`z-10 mb-2 w-12 h-12 bg-[#262626] rounded-full flex items-center justify-center border border-gray-700 group-hover:border-${color}-500 transition-all duration-150`}>
         <div className={`text-${color}-500`}>
           {icon}
         </div>
       </div>
       
-      <h3 className="z-10 font-semibold text-white mb-1 group-hover:text-white transition-colors duration-300">{name}</h3>
+      <h3 className="z-10 font-semibold text-white mb-1 group-hover:text-white transition-colors duration-150">{name}</h3>
       
-      <div className="absolute inset-0 flex items-center justify-center bg-[#171717]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+      <div className="absolute inset-0 flex items-center justify-center bg-[#171717]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
         <p className="text-sm text-gray-300 text-center px-4">
           <span className="text-purple-400 font-medium">➤</span> {description}
         </p>
       </div>
       
-      <div className={`absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-${color}-600 to-${color === "purple" ? "indigo" : color === "indigo" ? "teal" : "purple"}-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
+      <div className={`absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-${color}-600 to-${color === "purple" ? "indigo" : color === "indigo" ? "teal" : "purple"}-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-150 origin-left`}></div>
     </motion.div>
   );
 }
