@@ -14,6 +14,7 @@ interface GlowButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+  icon?: ReactNode;
 }
 
 export default function GlowButton({ 
@@ -26,7 +27,8 @@ export default function GlowButton({
   constantAnimation = false,
   className,
   type,
-  disabled = false
+  disabled = false,
+  icon
 }: GlowButtonProps) {
   const sizeClasses = {
     sm: "px-6 py-2.5 text-sm",
@@ -43,7 +45,7 @@ export default function GlowButton({
 
   const buttonContent = (
     <motion.span 
-      className={`relative z-10 overflow-hidden inline-block font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className || ''}`}
+      className={`relative z-10 overflow-hidden inline-flex items-center gap-2 font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className || ''}`}
       whileHover={disabled ? {} : { scale: constantAnimation ? 1.05 : 1.03 }}
       whileTap={disabled ? {} : { scale: 0.98 }}
       animate={disabled ? {} : (constantAnimation ? { scale: [1, 1.03, 1] } : {})}
@@ -53,6 +55,7 @@ export default function GlowButton({
         repeatType: "reverse" 
       } : { duration: 0.3 }}
     >
+      {icon && <span className="shrink-0">{icon}</span>}
       <span className="relative z-10">{children}</span>
       {variant === "default" && !disabled && (
         <span 

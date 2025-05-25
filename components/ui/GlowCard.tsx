@@ -7,21 +7,32 @@ interface GlowCardProps {
   children: ReactNode;
   glowColor?: "purple" | "indigo" | "teal";
   className?: string;
+  href?: string;
 }
 
-export default function GlowCard({ children, glowColor = "purple", className = "" }: GlowCardProps) {
+export default function GlowCard({ children, glowColor = "purple", className = "", href }: GlowCardProps) {
   const glowClasses = {
     purple: "hover:shadow-[0_0_25px_5px_rgba(109,40,217,0.25)] hover:border-purple-500/50",
     indigo: "hover:shadow-[0_0_25px_5px_rgba(79,70,229,0.25)] hover:border-indigo-500/50",
     teal: "hover:shadow-[0_0_25px_5px_rgba(13,148,136,0.25)] hover:border-teal-500/50"
   };
 
-  return (
+  const cardContent = (
     <motion.div 
-      className={`bg-[#171717] rounded-2xl p-6 border border-gray-800 transition-all duration-300 ${glowClasses[glowColor]} ${className}`}
+      className={`bg-[#171717] rounded-2xl p-6 border border-gray-800 transition-all duration-300 ${glowClasses[glowColor]} ${className} ${href ? 'cursor-pointer' : ''}`}
       whileHover={{ y: -5 }}
     >
       {children}
     </motion.div>
   );
+
+  if (href) {
+    return (
+      <a href={href} className="block">
+        {cardContent}
+      </a>
+    );
+  }
+
+  return cardContent;
 }

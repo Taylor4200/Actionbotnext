@@ -165,7 +165,6 @@ export default function IntegrationsPage() {
                 variant={integration.status === "connected" ? "outline" : "default"}
                 size="sm"
                 fullWidth
-                glowColor={integration.glowColor}
               >
                 {integration.status === "connected"
                   ? "Disconnect"
