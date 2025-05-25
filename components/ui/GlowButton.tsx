@@ -8,7 +8,7 @@ interface GlowButtonProps {
   href?: string;
   onClick?: () => void;
   fullWidth?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "icon";
   constantAnimation?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
@@ -27,7 +27,8 @@ export default function GlowButton({
   const sizeClasses = {
     sm: "px-6 py-2.5 text-sm",
     md: "px-8 py-4",
-    lg: "px-10 py-5 text-lg"
+    lg: "px-10 py-5 text-lg",
+    icon: "w-10 h-10 p-2 flex items-center justify-center"
   };
 
   const buttonContent = (
