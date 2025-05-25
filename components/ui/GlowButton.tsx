@@ -10,6 +10,8 @@ interface GlowButtonProps {
   fullWidth?: boolean;
   size?: "sm" | "md" | "lg";
   constantAnimation?: boolean;
+  className?: string;
+  type?: "button" | "submit" | "reset";
 }
 
 export default function GlowButton({ 
@@ -18,7 +20,9 @@ export default function GlowButton({
   onClick, 
   fullWidth = false,
   size = "md",
-  constantAnimation = false
+  constantAnimation = false,
+  className,
+  type
 }: GlowButtonProps) {
   const sizeClasses = {
     sm: "px-6 py-2.5 text-sm",
@@ -28,7 +32,7 @@ export default function GlowButton({
 
   const buttonContent = (
     <motion.span 
-      className={`relative z-10 overflow-hidden inline-block bg-[#171717] text-white font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''}`}
+      className={`relative z-10 overflow-hidden inline-block bg-[#171717] text-white font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''} ${className || ''}`}
       whileHover={{ scale: constantAnimation ? 1.05 : 1.03 }}
       whileTap={{ scale: 0.98 }}
       animate={constantAnimation ? { scale: [1, 1.03, 1] } : {}}
@@ -51,7 +55,7 @@ export default function GlowButton({
 
   if (onClick) {
     return (
-      <button onClick={onClick} className={`${fullWidth ? 'w-full' : ''}`}>
+      <button onClick={onClick} className={`${fullWidth ? 'w-full' : ''} ${type || ''}`}>
         {buttonContent}
       </button>
     );
