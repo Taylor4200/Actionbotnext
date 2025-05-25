@@ -1,7 +1,4 @@
 {
   "/[[...slug]]/page": "app/[[...slug]]/page.js",
-  "/about/page": "app/about/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/privacy/page": "app/privacy/page.js",
-  "/terms/page": "app/terms/page.js"
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js"
 }
