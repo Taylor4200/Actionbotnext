@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import GlowCard from "@/components/ui/GlowCard";
 import SignupForm from "@/components/auth/SignupForm";
 
-export default function SignupPage() {
+function SignupContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -54,5 +54,27 @@ export default function SignupPage() {
         </GlowCard>
       </motion.div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#0f0f0f] p-4">
+        <div className="w-full max-w-md">
+          <GlowCard>
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-gray-800 rounded w-3/4 mx-auto"></div>
+              <div className="h-4 bg-gray-800 rounded w-1/2 mx-auto"></div>
+              <div className="h-10 bg-gray-800 rounded"></div>
+              <div className="h-10 bg-gray-800 rounded"></div>
+              <div className="h-10 bg-gray-800 rounded"></div>
+            </div>
+          </GlowCard>
+        </div>
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 } 
