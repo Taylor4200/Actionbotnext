@@ -9,7 +9,7 @@ import GlowButton from "@/components/ui/GlowButton";
 // import { Label } from "@/components/ui/label";
 
 interface Plan {
-  id: "free" | "pro";
+  id: "free" | "pro" | "teams";
   name: string;
   price: string;
   benefits: string[];
@@ -20,21 +20,49 @@ const plans: Plan[] = [
   {
     id: "free",
     name: "Free Plan",
-    price: "$0",
-    benefits: ["Basic features", "Community support", "1 project"],
+    price: "$0/month",
+    benefits: [
+      "5 automations/month",
+      "3 connected services",
+      "Basic reporting",
+      "Community support",
+      "Pre-built templates only",
+    ],
   },
   {
     id: "pro",
     name: "Pro Plan",
-    price: "$9/month",
-    benefits: ["Unlimited projects", "Priority support", "Advanced analytics"],
+    price: "$19/month",
+    benefits: [
+      "Unlimited automations",
+      "15 connected services",
+      "Advanced reporting & analytics",
+      "Priority support",
+      "Custom workflow builder",
+      "API access",
+      "Webhook triggers",
+    ],
     popular: true,
+  },
+  {
+    id: "teams",
+    name: "Teams Plan",
+    price: "$49/month",
+    benefits: [
+      "Everything in Pro",
+      "Unlimited connected services",
+      "Team collaboration features",
+      "Shared workflow templates",
+      "Advanced scheduling",
+      "Custom integrations",
+      "Team analytics dashboard",
+    ],
   },
 ];
 
 interface SignupFormProps {
-  initialPlan?: "free" | "pro";
-  onSubmit: (data: { email: string; password: string; plan: "free" | "pro" }) => void;
+  initialPlan?: "free" | "pro" | "teams";
+  onSubmit: (data: { email: string; password: string; plan: "free" | "pro" | "teams" }) => void;
 }
 
 export default function SignupForm({
@@ -63,12 +91,12 @@ export default function SignupForm({
   return (
     <div className="w-full max-w-md mx-auto space-y-8">
       {/* Plan Selection */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {plans.map((plan) => (
           <motion.div
             key={plan.id}
             className={cn(
-              "relative p-6 rounded-lg border cursor-pointer transition-all duration-200",
+              "relative p-6 rounded-lg border cursor-pointer transition-all duration-200 space-y-4", // Added space-y-4 for benefit list spacing
               "bg-[#171717]",
               selectedPlan === plan.id
                 ? "border-purple-500 ring-2 ring-purple-500/50 shadow-lg shadow-purple-500/20"
@@ -88,8 +116,8 @@ export default function SignupForm({
               <p className="text-2xl font-bold text-purple-400">{plan.price}</p>
               <ul className="text-gray-400 text-sm space-y-1">
                 {plan.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    {/* Placeholder for check icon */}
+                  <li key={index} className="flex items-start gap-2">
+                    {/* Placeholder for check icon - Adjusted alignment */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -100,11 +128,11 @@ export default function SignupForm({
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="lucide lucide-check text-teal-400"
+                      className="lucide lucide-check text-teal-400 mt-1"
                     >
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
-                    <span>{benefit}</span>
+                    <span className="flex-1">{benefit}</span>
                   </li>
                 ))}
               </ul>
@@ -159,9 +187,8 @@ export default function SignupForm({
             <p className="mt-1 text-sm text-red-500">{errors.password}</p>
           )}
         </div>
-        {/* Using the current GlowButton component - should now support type and fullWidth */}
         <GlowButton type="submit" fullWidth>
-          Sign Up for {selectedPlan === "pro" ? "Pro" : "Free"}
+          Get Started
         </GlowButton>
       </form>
     </div>

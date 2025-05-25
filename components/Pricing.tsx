@@ -134,12 +134,11 @@ export default function Pricing() {
       price: "$0",
       description: "Perfect for trying out ActionBot for personal or small projects.",
       features: [
-        { available: true, text: "10 automations/month" },
+        { available: true, text: "5 automations/month" },
         { available: true, text: "3 connected services" },
         { available: true, text: "Basic reporting" },
         { available: true, text: "Community support" },
-        { available: false, text: "Custom workflows" },
-        { available: false, text: "API access" },
+        { available: true, text: "Pre-built templates only" },
       ],
       cta: "Get Started",
       isPopular: false,
@@ -147,33 +146,35 @@ export default function Pricing() {
     },
     {
       name: "Pro",
-      price: "$29",
+      price: "$19",
       description: "For professionals and teams who need more automations and integrations.",
       features: [
         { available: true, text: "Unlimited automations" },
-        { available: true, text: "20 connected services" },
-        { available: true, text: "Advanced reporting" },
+        { available: true, text: "15 connected services" },
+        { available: true, text: "Advanced reporting & analytics" },
         { available: true, text: "Priority support" },
-        { available: true, text: "Custom workflows" },
-        { available: false, text: "API access" },
+        { available: true, text: "Custom workflow builder" },
+        { available: true, text: "API access" },
+        { available: true, text: "Webhook triggers" },
       ],
       cta: "Get Started",
       isPopular: true,
       icon: <Sparkles className="w-6 h-6" />
     },
     {
-      name: "Enterprise",
-      price: "$99",
-      description: "For organizations requiring enterprise features and dedicated support.",
+      name: "Teams",
+      price: "$49",
+      description: "For teams requiring enterprise features and dedicated support.",
       features: [
-        { available: true, text: "Unlimited automations" },
+        { available: true, text: "Everything in Pro" },
         { available: true, text: "Unlimited connected services" },
-        { available: true, text: "Enterprise reporting" },
-        { available: true, text: "Dedicated support" },
-        { available: true, text: "Custom workflows" },
-        { available: true, text: "API access" },
+        { available: true, text: "Team collaboration features" },
+        { available: true, text: "Shared workflow templates" },
+        { available: true, text: "Advanced scheduling" },
+        { available: true, text: "Custom integrations" },
+        { available: true, text: "Team analytics dashboard" },
       ],
-      cta: "Contact Sales",
+      cta: "Get Started",
       isPopular: false,
       icon: <Shield className="w-6 h-6" />
     }
@@ -225,7 +226,7 @@ export default function Pricing() {
             viewport={{ once: true }}
             className="text-gray-400 max-w-2xl mx-auto text-lg"
           >
-            Start free and upgrade as your automation needs grow.
+            Start free, scale as you grow.
           </motion.p>
         </div>
         
