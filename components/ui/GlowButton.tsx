@@ -13,6 +13,7 @@ interface GlowButtonProps {
   constantAnimation?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export default function GlowButton({ 
@@ -24,7 +25,8 @@ export default function GlowButton({
   variant = "default",
   constantAnimation = false,
   className,
-  type
+  type,
+  disabled = false
 }: GlowButtonProps) {
   const sizeClasses = {
     sm: "px-6 py-2.5 text-sm",
@@ -41,10 +43,10 @@ export default function GlowButton({
 
   const buttonContent = (
     <motion.span 
-      className={`relative z-10 overflow-hidden inline-block font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${className || ''}`}
-      whileHover={{ scale: constantAnimation ? 1.05 : 1.03 }}
-      whileTap={{ scale: 0.98 }}
-      animate={constantAnimation ? { scale: [1, 1.03, 1] } : {}}
+      className={`relative z-10 overflow-hidden inline-block font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className || ''}`}
+      whileHover={disabled ? {} : { scale: constantAnimation ? 1.05 : 1.03 }}
+      whileTap={disabled ? {} : { scale: 0.98 }}
+      animate={disabled ? {} : (constantAnimation ? { scale: [1, 1.03, 1] } : {})}
       transition={constantAnimation ? { 
         repeat: Infinity, 
         duration: 2,
@@ -52,7 +54,7 @@ export default function GlowButton({
       } : { duration: 0.3 }}
     >
       <span className="relative z-10">{children}</span>
-      {variant === "default" && (
+      {variant === "default" && !disabled && (
         <span 
           className="absolute inset-0 bg-gradient-to-r from-purple-700 via-indigo-600 to-teal-700 bg-size-200 animate-gradient-shift -z-10"
           style={{ 
@@ -66,14 +68,22 @@ export default function GlowButton({
 
   if (onClick) {
     return (
-      <button onClick={onClick} className={`${fullWidth ? 'w-full' : ''} ${type || ''}`}>
+      <button 
+        onClick={disabled ? undefined : onClick} 
+        className={`${fullWidth ? 'w-full' : ''} ${type || ''}`}
+        disabled={disabled}
+      >
         {buttonContent}
       </button>
     );
   }
 
   return (
-    <a href={href} className={`${fullWidth ? 'w-full' : ''} inline-block`}>
+    <a 
+      href={disabled ? undefined : href} 
+      className={`${fullWidth ? 'w-full' : ''} inline-block ${disabled ? 'pointer-events-none' : ''}`}
+      aria-disabled={disabled}
+    >
       {buttonContent}
     </a>
   );
