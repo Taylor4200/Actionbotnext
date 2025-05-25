@@ -138,11 +138,11 @@ export default function SettingsPage() {
         </div>
 
         <div className="flex gap-4">
-          <GlowButton variant="outline" glowColor="indigo">
+          <GlowButton variant="outline">
             Generate New Key
           </GlowButton>
-          <GlowButton variant="outline" glowColor="indigo">
-            View Usage
+          <GlowButton variant="outline">
+            Copy to Clipboard
           </GlowButton>
         </div>
       </GlowCard>
