@@ -9,6 +9,7 @@ interface GlowButtonProps {
   onClick?: () => void;
   fullWidth?: boolean;
   size?: "sm" | "md" | "lg" | "icon";
+  variant?: "default" | "ghost" | "outline";
   constantAnimation?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
@@ -20,6 +21,7 @@ export default function GlowButton({
   onClick, 
   fullWidth = false,
   size = "md",
+  variant = "default",
   constantAnimation = false,
   className,
   type
@@ -31,9 +33,15 @@ export default function GlowButton({
     icon: "w-10 h-10 p-2 flex items-center justify-center"
   };
 
+  const variantClasses = {
+    default: "bg-[#171717] text-white",
+    ghost: "bg-transparent hover:bg-[#171717]/10",
+    outline: "bg-transparent border border-gray-800 hover:border-gray-700"
+  };
+
   const buttonContent = (
     <motion.span 
-      className={`relative z-10 overflow-hidden inline-block bg-[#171717] text-white font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''} ${className || ''}`}
+      className={`relative z-10 overflow-hidden inline-block font-semibold rounded-xl transition duration-300 ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''} ${className || ''}`}
       whileHover={{ scale: constantAnimation ? 1.05 : 1.03 }}
       whileTap={{ scale: 0.98 }}
       animate={constantAnimation ? { scale: [1, 1.03, 1] } : {}}
@@ -44,13 +52,15 @@ export default function GlowButton({
       } : { duration: 0.3 }}
     >
       <span className="relative z-10">{children}</span>
-      <span 
-        className="absolute inset-0 bg-gradient-to-r from-purple-700 via-indigo-600 to-teal-700 bg-size-200 animate-gradient-shift -z-10"
-        style={{ 
-          backgroundSize: "200% 200%",
-          animation: "gradient-shift 8s ease infinite"
-        }}
-      ></span>
+      {variant === "default" && (
+        <span 
+          className="absolute inset-0 bg-gradient-to-r from-purple-700 via-indigo-600 to-teal-700 bg-size-200 animate-gradient-shift -z-10"
+          style={{ 
+            backgroundSize: "200% 200%",
+            animation: "gradient-shift 8s ease infinite"
+          }}
+        ></span>
+      )}
     </motion.span>
   );
 
