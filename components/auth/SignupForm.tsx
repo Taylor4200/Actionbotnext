@@ -1,148 +1,164 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils"; // Assuming you have a cn utility
 import GlowButton from "@/components/ui/GlowButton";
+import { Eye, EyeOff } from 'lucide-react'; // Import icons
+import zxcvbn from 'zxcvbn'; // Import zxcvbn (install with `npm install zxcvbn`)
+import ConfettiExplosion from 'react-confetti-explosion'; // You might need to install this library (e.g., npm install react-confetti-explosion)
+
 // Assuming shadcn/ui components if needed, e.g., Input, Label
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 
-interface Plan {
-  id: "free" | "pro" | "teams";
-  name: string;
-  price: string;
-  benefits: string[];
-  popular?: boolean;
-}
-
-const plans: Plan[] = [
-  {
-    id: "free",
-    name: "Free Plan",
-    price: "$0/month",
-    benefits: [
-      "5 automations/month",
-      "3 connected services",
-      "Basic reporting",
-      "Community support",
-      "Pre-built templates only",
-    ],
-  },
-  {
-    id: "pro",
-    name: "Pro Plan",
-    price: "$19/month",
-    benefits: [
-      "Unlimited automations",
-      "15 connected services",
-      "Advanced reporting & analytics",
-      "Priority support",
-      "Custom workflow builder",
-      "API access",
-      "Webhook triggers",
-    ],
-    popular: true,
-  },
-  {
-    id: "teams",
-    name: "Teams Plan",
-    price: "$49/month",
-    benefits: [
-      "Everything in Pro",
-      "Unlimited connected services",
-      "Team collaboration features",
-      "Shared workflow templates",
-      "Advanced scheduling",
-      "Custom integrations",
-      "Team analytics dashboard",
-    ],
-  },
-];
-
 interface SignupFormProps {
-  initialPlan?: "free" | "pro" | "teams";
   onSubmit: (data: { email: string; password: string; plan: "free" | "pro" | "teams" }) => void;
 }
 
 export default function SignupForm({
-  initialPlan = "free",
   onSubmit,
 }: SignupFormProps) {
-  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // Placeholder for validation state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrengthScore, setPasswordStrengthScore] = useState(0);
+  const [passwordFeedback, setPasswordFeedback] = useState<string | undefined>(undefined);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Basic validation placeholder
-    const newErrors: { email?: string; password?: string } = {};
-    if (!email) newErrors.email = "Email is required.";
-    if (!password) newErrors.password = "Password is required.";
-    setErrors(newErrors);
+  // Basic email format validation
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+    return emailRegex.test(email);
+  };
 
-    if (Object.keys(newErrors).length === 0) {
-      onSubmit({ email, password, plan: selectedPlan });
+  // Strong password complexity validation
+  const validatePasswordComplexity = (password: string): boolean => {
+    // Must be at least 8 characters
+    if (password.length < 8) return false;
+    // Must contain at least one lowercase letter
+    if (!/[a-z]/.test(password)) return false;
+    // Must contain at least one uppercase letter
+    if (!/[A-Z]/.test(password)) return false;
+    // Must contain at least one number
+    if (!/[0-9]/.test(password)) return false;
+    // Must contain at least one special character (using a common set)
+    if (!/[!@#$%^&*()_+\[\]{};':"\\|,.<>?~`-]/.test(password)) return false; // Escape special regex characters
+    return true;
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (newPassword) {
+      const result = zxcvbn(newPassword);
+      setPasswordStrengthScore(result.score);
+      // Combine feedback from zxcvbn
+      let feedback = result.feedback.suggestions.join(' ');
+       if (result.feedback.warning) {
+         feedback = result.feedback.warning + (feedback ? ' ' + feedback : '');
+       }
+       setPasswordFeedback(feedback || undefined); // Use undefined if no feedback
+    } else {
+      setPasswordStrengthScore(0);
+      setPasswordFeedback(undefined);
+    }
+
+    // Clear password-related errors when typing
+    if (errors.password) {
+        setErrors(prev => ({ ...prev, password: undefined }));
     }
   };
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    
+    // Basic validation
+    const newErrors: { email?: string; password?: string } = {};
+    if (!email) {
+      newErrors.email = "Email is required.";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    
+    // Password validation
+    if (!password) {
+      newErrors.password = "Password is required.";
+    } else if (!validatePasswordComplexity(password)) {
+      newErrors.password = "Password must be at least 8 characters and include lowercase, uppercase, number, and special character.";
+    } else if (passwordStrengthScore < 3) {
+        newErrors.password = "Password is too weak. Please choose a stronger password.";
+    } else {
+      // --- Placeholder for Server-Side HaveIBeenPwned Check ---
+      // In a real application, you would send the password hash (SHA-1 prefix) 
+      // to your backend here. The backend would query the HIBP API 
+      // and return whether the password was found in a breach.
+      // Example (conceptual): 
+      // const isPwned = await checkPasswordAgainstHIBP(password);
+      // if (isPwned) {
+      //   newErrors.password = "⚠️ Try a different password — this one has appeared in a known data breach.";
+      // }
+      // --------------------------------------------------------
+      // For this client-side mock, we'll assume it passes if complexity/zxcvbn checks pass
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+
+    setErrors({}); // Clear errors if validation passes
+
+    try {
+      // Call onSubmit with the form data (simulated async)
+      // Note: In a real flow, this would trigger sending email verification code first.
+      await onSubmit({ email, password, plan: "free" });
+    } catch (error) {
+      console.error("Signup error:", error);
+      setErrors({ email: "An error occurred during signup." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Trigger confetti on score 4
+  useEffect(() => {
+    if (passwordStrengthScore === 4) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 2000); // Show confetti for 2 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [passwordStrengthScore]);
+
+  // Map zxcvbn score to color and label
+  const strengthColor = [
+    'bg-gray-500', // 0
+    'bg-red-500',  // 1
+    'bg-orange-500', // 2
+    'bg-yellow-500', // 3
+    'bg-green-500' // 4
+  ][passwordStrengthScore];
+
+  const strengthLabel = [
+    'Too weak', 
+    'Weak', 
+    'Good', 
+    'Strong', 
+    'Very strong'
+  ][passwordStrengthScore];
+
   return (
-    <div className="w-full max-w-md mx-auto space-y-8">
-      {/* Plan Selection */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {plans.map((plan) => (
-          <motion.div
-            key={plan.id}
-            className={cn(
-              "relative p-6 rounded-lg border cursor-pointer transition-all duration-200 space-y-4", // Added space-y-4 for benefit list spacing
-              "bg-[#171717]",
-              selectedPlan === plan.id
-                ? "border-purple-500 ring-2 ring-purple-500/50 shadow-lg shadow-purple-500/20"
-                : "border-gray-700 hover:border-gray-600"
-            )}
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setSelectedPlan(plan.id)}
-          >
-            {plan.popular && (
-              <span className="absolute top-0 right-0 -mt-3 mr-3 px-3 py-1 text-xs font-bold text-purple-800 bg-purple-200 rounded-full shadow-md">
-                Most Popular
-              </span>
-            )}
-            <div className="space-y-3">
-              <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
-              <p className="text-2xl font-bold text-purple-400">{plan.price}</p>
-              <ul className="text-gray-400 text-sm space-y-1">
-                {plan.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    {/* Placeholder for check icon - Adjusted alignment */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-check text-teal-400 mt-1"
-                    >
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                    <span className="flex-1">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+    <div className="w-full max-w-md mx-auto space-y-8"> {/* Adjusted max-width and spacing */}
+      {/* Removed Pricing Section */}
 
       {/* Signup Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form className="space-y-6" noValidate>
         <div>
           <label
             htmlFor="email"
@@ -157,38 +173,102 @@ export default function SignupForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={cn(
-              "w-full bg-[#171717] border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent",
+              "w-full bg-[#171717] border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent",
               errors.email ? "border-red-500" : "border-gray-800"
             )}
+            disabled={isSubmitting}
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-500">{errors.email}</p>
           )}
         </div>
         <div>
+          {showConfetti && (
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50">
+                <ConfettiExplosion
+                   force={0.6}
+                   duration={2500}
+                   particleCount={50}
+                   width={1000}
+                   colors={['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF']}
+                />
+             </div>
+          )}
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-300 mb-2"
           >
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={cn(
-              "w-full bg-[#171717] border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent",
-              errors.password ? "border-red-500" : "border-gray-800"
-            )}
-          />
-          {errors.password && (
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              required
+              value={password}
+              onChange={handlePasswordChange}
+              className={cn(
+                "w-full bg-[#171717] border rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent",
+                errors.password ? "border-red-500" : "border-gray-800"
+              )}
+              disabled={isSubmitting}
+            />
+             <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+             >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+             </button>
+          </div>
+
+          {/* Password Strength Bar */}
+          <div className="mt-2">
+            <div className="flex items-center justify-between mb-1">
+               <span className="text-xs font-medium text-gray-400">
+                  Password Strength:
+               </span>
+               {passwordStrengthScore >= 3 && (
+                  <motion.span
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     transition={{ duration: 0.3 }}
+                     className="text-xs font-semibold text-green-400"
+                  >
+                     Ready!
+                  </motion.span>
+               )}
+            </div>
+            <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: "0%" }}
+                animate={{ width: `${(passwordStrengthScore + 1) * 20}%` }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className={cn(
+                  "h-full",
+                  passwordStrengthScore === 0 && "bg-gray-500 opacity-50", // Faint for score 0
+                  passwordStrengthScore === 1 && "bg-red-500",
+                  passwordStrengthScore === 2 && "bg-orange-500",
+                  passwordStrengthScore === 3 && "bg-yellow-500 glow-yellow", // Add glow class
+                  passwordStrengthScore === 4 && "bg-green-500 glow-green" // Add glow class
+                )}
+              >
+              </motion.div>
+            </div>
+             {passwordFeedback && ( // Show feedback text if available
+                 <p className={cn("mt-1 text-sm", passwordStrengthScore < 2 ? 'text-red-400' : passwordStrengthScore < 4 ? 'text-yellow-400' : 'text-green-400')}>
+                     {passwordFeedback}
+                 </p>
+             )}
+          </div>
+
+          {errors.password && !passwordFeedback && ( // Show password error only if no strength feedback is shown
             <p className="mt-1 text-sm text-red-500">{errors.password}</p>
           )}
         </div>
-        <GlowButton type="submit" fullWidth>
-          Get Started
+        <GlowButton onClick={handleSubmit} fullWidth disabled={isSubmitting || passwordStrengthScore < 3}>
+          {isSubmitting ? "Creating account..." : "Get Started"}
         </GlowButton>
       </form>
     </div>

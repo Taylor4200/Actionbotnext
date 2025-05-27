@@ -175,11 +175,11 @@ export default function CTA() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center mt-6"
           >
-            <GlowButton href="#" constantAnimation size="lg">
-              Launch ActionBot
+            <GlowButton href="/signup?plan=free" constantAnimation size="lg">
+              Try ActionBot – Free Forever
             </GlowButton>
             <motion.a 
-              href="#" 
+              href="/contact?intent=demo"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               className="bg-[#0f0f0f] border border-gray-700 text-white font-semibold px-8 py-4 rounded-xl transition duration-300 hover:bg-[#171717] hover:border-gray-600 text-center"

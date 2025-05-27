@@ -271,8 +271,8 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <GlowButton href="#" size="lg">
-              Try ActionBot Free
+            <GlowButton href="/signup?plan=free" size="lg">
+              Start Free
             </GlowButton>
             <motion.a 
               href="#demo"
