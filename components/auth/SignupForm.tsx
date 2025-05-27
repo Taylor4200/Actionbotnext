@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils"; // Assuming you have a cn utility
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import GlowButton from "@/components/ui/GlowButton";
-import { Eye, EyeOff } from 'lucide-react'; // Import icons
-import zxcvbn from 'zxcvbn'; // Import zxcvbn (install with `npm install zxcvbn`)
-import ConfettiExplosion from 'react-confetti-explosion'; // You might need to install this library (e.g., npm install react-confetti-explosion)
+import dynamic from 'next/dynamic';
 
-// Assuming shadcn/ui components if needed, e.g., Input, Label
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
+// Dynamically import heavy components
+const PasswordStrengthIndicator = dynamic(() => import('./PasswordStrengthIndicator'), {
+  ssr: false,
+  loading: () => <div className="h-1 bg-gray-700 rounded-full w-full" />
+});
 
 interface SignupFormProps {
   onSubmit: (data: { email: string; password: string; plan: "free" | "pro" | "teams" }) => void;
@@ -24,9 +23,6 @@ export default function SignupForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordStrengthScore, setPasswordStrengthScore] = useState(0);
-  const [passwordFeedback, setPasswordFeedback] = useState<string | undefined>(undefined);
-  const [showConfetti, setShowConfetti] = useState(false);
 
   // Basic email format validation
   const validateEmail = (email: string): boolean => {
@@ -36,47 +32,17 @@ export default function SignupForm({
 
   // Strong password complexity validation
   const validatePasswordComplexity = (password: string): boolean => {
-    // Must be at least 8 characters
     if (password.length < 8) return false;
-    // Must contain at least one lowercase letter
     if (!/[a-z]/.test(password)) return false;
-    // Must contain at least one uppercase letter
     if (!/[A-Z]/.test(password)) return false;
-    // Must contain at least one number
     if (!/[0-9]/.test(password)) return false;
-    // Must contain at least one special character (using a common set)
-    if (!/[!@#$%^&*()_+\[\]{};':"\\|,.<>?~`-]/.test(password)) return false; // Escape special regex characters
+    if (!/[!@#$%^&*()_+\[\]{};':"\\|,.<>?~`-]/.test(password)) return false;
     return true;
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-
-    if (newPassword) {
-      const result = zxcvbn(newPassword);
-      setPasswordStrengthScore(result.score);
-      // Combine feedback from zxcvbn
-      let feedback = result.feedback.suggestions.join(' ');
-       if (result.feedback.warning) {
-         feedback = result.feedback.warning + (feedback ? ' ' + feedback : '');
-       }
-       setPasswordFeedback(feedback || undefined); // Use undefined if no feedback
-    } else {
-      setPasswordStrengthScore(0);
-      setPasswordFeedback(undefined);
-    }
-
-    // Clear password-related errors when typing
-    if (errors.password) {
-        setErrors(prev => ({ ...prev, password: undefined }));
-    }
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     
-    // Basic validation
     const newErrors: { email?: string; password?: string } = {};
     if (!email) {
       newErrors.email = "Email is required.";
@@ -84,25 +50,10 @@ export default function SignupForm({
       newErrors.email = "Please enter a valid email address.";
     }
     
-    // Password validation
     if (!password) {
       newErrors.password = "Password is required.";
     } else if (!validatePasswordComplexity(password)) {
       newErrors.password = "Password must be at least 8 characters and include lowercase, uppercase, number, and special character.";
-    } else if (passwordStrengthScore < 3) {
-        newErrors.password = "Password is too weak. Please choose a stronger password.";
-    } else {
-      // --- Placeholder for Server-Side HaveIBeenPwned Check ---
-      // In a real application, you would send the password hash (SHA-1 prefix) 
-      // to your backend here. The backend would query the HIBP API 
-      // and return whether the password was found in a breach.
-      // Example (conceptual): 
-      // const isPwned = await checkPasswordAgainstHIBP(password);
-      // if (isPwned) {
-      //   newErrors.password = "⚠️ Try a different password — this one has appeared in a known data breach.";
-      // }
-      // --------------------------------------------------------
-      // For this client-side mock, we'll assume it passes if complexity/zxcvbn checks pass
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -111,11 +62,9 @@ export default function SignupForm({
       return;
     }
 
-    setErrors({}); // Clear errors if validation passes
+    setErrors({});
 
     try {
-      // Call onSubmit with the form data (simulated async)
-      // Note: In a real flow, this would trigger sending email verification code first.
       await onSubmit({ email, password, plan: "free" });
     } catch (error) {
       console.error("Signup error:", error);
@@ -125,40 +74,9 @@ export default function SignupForm({
     }
   };
 
-  // Trigger confetti on score 4
-  useEffect(() => {
-    if (passwordStrengthScore === 4) {
-      setShowConfetti(true);
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-      }, 2000); // Show confetti for 2 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [passwordStrengthScore]);
-
-  // Map zxcvbn score to color and label
-  const strengthColor = [
-    'bg-gray-500', // 0
-    'bg-red-500',  // 1
-    'bg-orange-500', // 2
-    'bg-yellow-500', // 3
-    'bg-green-500' // 4
-  ][passwordStrengthScore];
-
-  const strengthLabel = [
-    'Too weak', 
-    'Weak', 
-    'Good', 
-    'Strong', 
-    'Very strong'
-  ][passwordStrengthScore];
-
   return (
-    <div className="w-full max-w-md mx-auto space-y-8"> {/* Adjusted max-width and spacing */}
-      {/* Removed Pricing Section */}
-
-      {/* Signup Form */}
-      <form className="space-y-6" noValidate>
+    <div className="w-full max-w-md mx-auto space-y-8">
+      <form className="space-y-6" noValidate onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <div>
           <label
             htmlFor="email"
@@ -183,17 +101,6 @@ export default function SignupForm({
           )}
         </div>
         <div>
-          {showConfetti && (
-             <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50">
-                <ConfettiExplosion
-                   force={0.6}
-                   duration={2500}
-                   particleCount={50}
-                   width={1000}
-                   colors={['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF']}
-                />
-             </div>
-          )}
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-300 mb-2"
@@ -206,69 +113,39 @@ export default function SignupForm({
               id="password"
               required
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               className={cn(
                 "w-full bg-[#171717] border rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent",
                 errors.password ? "border-red-500" : "border-gray-800"
               )}
               disabled={isSubmitting}
             />
-             <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-             >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-             </button>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              )}
+            </button>
           </div>
-
-          {/* Password Strength Bar */}
-          <div className="mt-2">
-            <div className="flex items-center justify-between mb-1">
-               <span className="text-xs font-medium text-gray-400">
-                  Password Strength:
-               </span>
-               {passwordStrengthScore >= 3 && (
-                  <motion.span
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
-                     transition={{ duration: 0.3 }}
-                     className="text-xs font-semibold text-green-400"
-                  >
-                     Ready!
-                  </motion.span>
-               )}
-            </div>
-            <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: "0%" }}
-                animate={{ width: `${(passwordStrengthScore + 1) * 20}%` }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className={cn(
-                  "h-full",
-                  passwordStrengthScore === 0 && "bg-gray-500 opacity-50", // Faint for score 0
-                  passwordStrengthScore === 1 && "bg-red-500",
-                  passwordStrengthScore === 2 && "bg-orange-500",
-                  passwordStrengthScore === 3 && "bg-yellow-500 glow-yellow", // Add glow class
-                  passwordStrengthScore === 4 && "bg-green-500 glow-green" // Add glow class
-                )}
-              >
-              </motion.div>
-            </div>
-             {passwordFeedback && ( // Show feedback text if available
-                 <p className={cn("mt-1 text-sm", passwordStrengthScore < 2 ? 'text-red-400' : passwordStrengthScore < 4 ? 'text-yellow-400' : 'text-green-400')}>
-                     {passwordFeedback}
-                 </p>
-             )}
-          </div>
-
-          {errors.password && !passwordFeedback && ( // Show password error only if no strength feedback is shown
+          {password && <PasswordStrengthIndicator password={password} />}
+          {errors.password && (
             <p className="mt-1 text-sm text-red-500">{errors.password}</p>
           )}
         </div>
-        <GlowButton onClick={handleSubmit} fullWidth disabled={isSubmitting || passwordStrengthScore < 3}>
-          {isSubmitting ? "Creating account..." : "Get Started"}
+
+        <GlowButton
+          type="submit"
+          fullWidth
+          disabled={isSubmitting}
+          className="mt-6"
+        >
+          {isSubmitting ? "Creating account..." : "Create account"}
         </GlowButton>
       </form>
     </div>
