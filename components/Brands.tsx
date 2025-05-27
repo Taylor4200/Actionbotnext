@@ -1,3 +1,4 @@
+// Test comment
 "use client";
 
 import { motion } from "framer-motion";
@@ -114,7 +115,7 @@ export default function Brands() {
   ];
 
   return (
-    <section id="platforms" className="py-16 bg-[#171717]">
+    <section id="integrations" className="py-40 bg-[#171717]">
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

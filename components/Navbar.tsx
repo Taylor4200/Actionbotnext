@@ -15,7 +15,7 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 10);
       
       // Update active section based on scroll position
-      const sections = ["home", "features", "how-it-works", "platforms", "pricing", "testimonials"];
+      const sections = ["home", "integrations", "features", "how-it-works", "use-cases", "pricing", "testimonials"];
       const currentPosition = window.scrollY + 300;
       
       for (const section of sections) {
@@ -55,74 +55,74 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Left section - Logo and main navigation */}
           <div className="flex items-center space-x-8">
-            {/* Logo */}
-            <motion.a 
+        {/* Logo */}
+        <motion.a 
               href="/" 
-              className="flex items-center" 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+          className="flex items-center" 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <div className="relative h-10 w-10 mr-3 rounded-xl bg-gradient-to-br from-purple-700 to-indigo-600 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
+            <motion.span 
+              className="text-white font-bold text-xl"
+              animate={{ 
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                repeatType: "mirror"
+              }}
             >
-              <div className="relative h-10 w-10 mr-3 rounded-xl bg-gradient-to-br from-purple-700 to-indigo-600 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
-                <motion.span 
-                  className="text-white font-bold text-xl"
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity,
-                    repeatType: "mirror"
-                  }}
-                >
-                  A
-                </motion.span>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-700/50 to-indigo-600/50 opacity-70 blur-[10px] group-hover:opacity-100"></div>
-              </div>
-              <div>
-                <span className="text-white font-bold text-xl">ActionBot</span>
+              A
+            </motion.span>
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-700/50 to-indigo-600/50 opacity-70 blur-[10px] group-hover:opacity-100"></div>
+          </div>
+          <div>
+            <span className="text-white font-bold text-xl">ActionBot</span>
                 <div className="mt-0.5 text-xs text-purple-400 flex items-center">
-                  <Zap className="w-3 h-3 mr-1" />
+              <Zap className="w-3 h-3 mr-1" />
                   <span>AI-powered automation for everyone</span>
-                </div>
-              </div>
-            </motion.a>
-
+            </div>
+          </div>
+        </motion.a>
+        
             {/* Main navigation */}
             <div className="hidden md:flex items-center space-x-6">
+          <a 
+            href="#features" 
+            className={`text-sm font-medium relative px-1 py-2 transition duration-200 
+              ${isActive("features") ? "text-white" : "text-gray-400 hover:text-white"}`}
+          >
+            Features
+            {isActive("features") && (
+              <motion.div 
+                layoutId="navIndicator"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
+          </a>
+          <a 
+            href="#integrations" 
+            className={`text-sm font-medium relative px-1 py-2 transition duration-200 
+              ${isActive("integrations") ? "text-white" : "text-gray-400 hover:text-white"}`}
+          >
+            Integrations
+            {isActive("integrations") && (
+              <motion.div 
+                layoutId="navIndicator"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
+          </a>
               <a 
-                href="/features" 
-                className={`text-sm font-medium relative px-1 py-2 transition duration-200 
-                  ${isActive("features") ? "text-white" : "text-gray-400 hover:text-white"}`}
-              >
-                Features
-                {isActive("features") && (
-                  <motion.div 
-                    layoutId="navIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-              </a>
-              <a 
-                href="/integrations" 
-                className={`text-sm font-medium relative px-1 py-2 transition duration-200 
-                  ${isActive("integrations") ? "text-white" : "text-gray-400 hover:text-white"}`}
-              >
-                Integrations
-                {isActive("integrations") && (
-                  <motion.div 
-                    layoutId="navIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-              </a>
-              <a 
-                href="/use-cases" 
+                href="#use-cases" 
                 className={`text-sm font-medium relative px-1 py-2 transition duration-200 
                   ${isActive("use-cases") ? "text-white" : "text-gray-400 hover:text-white"}`}
               >
@@ -137,25 +137,25 @@ export default function Navbar() {
                   />
                 )}
               </a>
-              <a 
-                href="/pricing" 
-                className={`text-sm font-medium relative px-1 py-2 transition duration-200 
-                  ${isActive("pricing") ? "text-white" : "text-gray-400 hover:text-white"}`}
-              >
-                Pricing
-                {isActive("pricing") && (
-                  <motion.div 
-                    layoutId="navIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-              </a>
+          <a 
+            href="#pricing" 
+            className={`text-sm font-medium relative px-1 py-2 transition duration-200 
+              ${isActive("pricing") ? "text-white" : "text-gray-400 hover:text-white"}`}
+          >
+            Pricing
+            {isActive("pricing") && (
+              <motion.div 
+                layoutId="navIndicator"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
+          </a>
             </div>
-          </div>
-
+        </div>
+        
           {/* Right section - Auth links */}
           <div className="hidden md:flex items-center space-x-6">
             <a 
@@ -170,38 +170,38 @@ export default function Navbar() {
             >
               Sign Up
             </a>
-          </div>
-
+        </div>
+        
           {/* Mobile menu button */}
-          <motion.button 
-            className="md:hidden text-gray-300 hover:text-white relative z-50 bg-[#171717] p-2 rounded-lg"
-            onClick={() => setIsOpen(!isOpen)}
-            whileTap={{ scale: 0.95 }}
-          >
-            <AnimatePresence mode="wait">
-              {isOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-5 h-5" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-5 h-5" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+        <motion.button 
+          className="md:hidden text-gray-300 hover:text-white relative z-50 bg-[#171717] p-2 rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          whileTap={{ scale: 0.95 }}
+        >
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <X className="w-5 h-5" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Menu className="w-5 h-5" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
         </div>
       </div>
       
@@ -223,28 +223,37 @@ export default function Navbar() {
               className="flex flex-col items-center justify-center flex-1 space-y-6 px-6"
             >
               <a 
-                href="/features" 
+                href="#features" 
                 className={`text-2xl font-semibold ${isActive("features") ? "text-white" : "text-gray-300"}`}
                 onClick={() => setIsOpen(false)}
               >
                 Features
               </a>
               <a 
-                href="/integrations" 
+                href="#integrations" 
                 className={`text-2xl font-semibold ${isActive("integrations") ? "text-white" : "text-gray-300"}`}
                 onClick={() => setIsOpen(false)}
               >
                 Integrations
+                {isActive("integrations") && (
+                  <motion.div 
+                    layoutId="navIndicator-mobile"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 to-indigo-600"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
               </a>
               <a 
-                href="/use-cases" 
+                href="#use-cases" 
                 className={`text-2xl font-semibold ${isActive("use-cases") ? "text-white" : "text-gray-300"}`}
                 onClick={() => setIsOpen(false)}
               >
                 Use Cases
               </a>
               <a 
-                href="/pricing" 
+                href="#pricing" 
                 className={`text-2xl font-semibold ${isActive("pricing") ? "text-white" : "text-gray-300"}`}
                 onClick={() => setIsOpen(false)}
               >

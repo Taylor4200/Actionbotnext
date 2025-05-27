@@ -143,8 +143,9 @@ export default function Footer() {
             <ColumnHeader>Product</ColumnHeader>
             <ul className="space-y-3">
               <FooterLink href="#features">Features</FooterLink>
+              <FooterLink href="#integrations">Integrations</FooterLink>
+              <FooterLink href="#use-cases">Use Cases</FooterLink>
               <FooterLink href="#pricing">Pricing</FooterLink>
-              <FooterLink href="#platforms">Integrations</FooterLink>
               <FooterLink href="/changelog">Changelog</FooterLink>
               <FooterLink href="/roadmap">Roadmap</FooterLink>
               <FooterLink href="/beta">Beta Program</FooterLink>
