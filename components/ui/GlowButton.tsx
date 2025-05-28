@@ -69,18 +69,29 @@ export default function GlowButton({
     </motion.span>
   );
 
-  if (onClick) {
+  // If it has a type (button/submit/reset), always render as button
+  if (type || onClick) {
     return (
       <button 
-        onClick={disabled ? undefined : onClick} 
-        className={`${fullWidth ? 'w-full' : ''} ${type || ''}`}
+        onClick={disabled ? undefined : (e) => {
+          // Only prevent default for non-submit buttons
+          if (type !== 'submit' && onClick) {
+            e.preventDefault();
+          }
+          if (onClick) {
+            onClick();
+          }
+        }}
+        className={`${fullWidth ? 'w-full' : ''}`}
         disabled={disabled}
+        type={type || "button"}
       >
         {buttonContent}
       </button>
     );
   }
 
+  // Otherwise render as link
   return (
     <a 
       href={disabled ? undefined : href} 

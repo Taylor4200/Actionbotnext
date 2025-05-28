@@ -26,6 +26,7 @@ function LoginContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const newErrors: { email?: string; password?: string } = {};
     if (!email) newErrors.email = "Email is required.";
     if (!password) newErrors.password = "Password is required.";
@@ -34,6 +35,7 @@ function LoginContent() {
     if (Object.keys(newErrors).length === 0) {
     console.log("Logging in with:", { email, password });
     router.push("/dashboard");
+    return false;
     }
   };
 
@@ -59,7 +61,20 @@ function LoginContent() {
           </div>
 
           <GlowCard>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const newErrors: { email?: string; password?: string } = {};
+              if (!email) newErrors.email = "Email is required.";
+              if (!password) newErrors.password = "Password is required.";
+              setErrors(newErrors);
+          
+              if (Object.keys(newErrors).length === 0) {
+                console.log("Logging in with:", { email, password });
+                router.push("/dashboard");
+                return false;
+              }
+            }} className="space-y-6">
             <div>
                 <label
                   htmlFor="email"

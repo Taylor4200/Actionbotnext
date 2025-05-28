@@ -50,13 +50,8 @@ function EmailCodeContent() {
         if (code === '123456') { // Use a mock code for now
             setSuccess('Email verified successfully!');
             // Redirect based on plan query parameter
-            if (planQueryParam) {
-                console.log(`Email verified. Plan specified: ${planQueryParam}. Redirecting to dashboard.`);
-                router.push('/dashboard');
-            } else {
-                console.log('Email verified. No plan specified. Redirecting to select-plan.');
-                router.push('/select-plan');
-            }
+            console.log('Email verified. Redirecting to select-plan.');
+            router.push('/select-plan');
         } else {
             setError('Invalid or expired code. Please try again.');
         }
