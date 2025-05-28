@@ -6,7 +6,7 @@ import { Zap, Mail, Calendar, Code, User2, Clock, Bot } from "lucide-react";
 import GlowButton from "@/components/ui/GlowButton";
 import ParticlesBackground from "@/components/ui/ParticlesBackground";
 
-// Animated TypeWriter for Hero Title
+// Fixed TypeWriter component with proper gradient and cursor
 function TypeWriter({ text, className }: { text: string, className: string }) {
   const [displayText, setDisplayText] = useState("");
   const [index, setIndex] = useState(0);
@@ -22,13 +22,14 @@ function TypeWriter({ text, className }: { text: string, className: string }) {
   }, [index, text]);
   
   return (
-    <span className={className}>
-      {displayText}
+    <span className={className} style={{ display: 'inline-block', whiteSpace: 'pre' }}>
+      <span style={{ display: 'inline-block', verticalAlign: 'bottom' }}>{displayText}</span>
       {index < text.length && (
         <motion.span 
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 0.8, repeat: Infinity }}
-          className="inline-block w-[2px] h-8 ml-1 bg-purple-500"
+          className="inline-block w-[2px] h-full bg-gradient-to-r from-purple-500 to-indigo-500"
+          style={{ verticalAlign: 'bottom' }}
         />
       )}
     </span>
@@ -83,7 +84,7 @@ function ConsoleAnimation() {
       className="relative mx-auto w-full max-w-3xl h-80 md:h-96 rounded-2xl overflow-hidden bg-[#171717]/80 backdrop-blur-sm border border-gray-800 shadow-lg"
     >
       {/* Header */}
-      <div className="bg-[#0f0f0f] border-b border-gray-800 p-4 flex items-center">
+      <div className="bg-[#0f0f0f] border-b border-gray-800 p-4 flex items-center relative">
         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-700 to-indigo-600 flex items-center justify-center mr-3">
           <Bot className="w-4 h-4 text-white" />
         </div>
@@ -148,7 +149,7 @@ function ConsoleAnimation() {
       </div>
       
       {/* Interactive mode indicator */}
-      <div className="absolute bottom-3 right-3">
+      <div className="absolute top-2 right-2">
         <div className="flex items-center bg-black/40 backdrop-blur-sm rounded-full text-xs px-2 py-1">
           <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse mr-1"></div>
           <span className="text-purple-300">Live preview</span>
@@ -178,7 +179,7 @@ export default function Hero() {
   ];
 
   return (
-    <section id="home" className="relative pt-32 pb-20 overflow-hidden">
+    <section id="home" className="relative pt-32 pb-20 overflow-hidden bg-black">
       <ParticlesBackground />
       
       {/* Floating icons */}
@@ -245,15 +246,16 @@ export default function Hero() {
               delay: 0.2,
               type: "spring" 
             }}
-            className="text-4xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300 leading-tight tracking-tight"
+            className="text-4xl md:text-7xl font-bold mb-6 tracking-tight leading-[1.3]"
           >
-            Your AI Assistant That <br />
-            <span className="text-purple-500">
-              <TypeWriter 
-                text="Actually Does Stuff" 
-                className="bg-gradient-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent"
-              />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300">
+              Your AI Assistant That
             </span>
+            <br />
+            <TypeWriter 
+              text="Actually Does Stuff" 
+              className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500"
+            />
           </motion.h1>
           
           <motion.p 
