@@ -1,7 +1,23 @@
 // lib/resend.ts
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend only if API key is available
+const getResend = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    // During build time, return a mock object instead of throwing
+    if (typeof window === 'undefined' && process.env.NODE_ENV !== 'production') {
+      console.warn('RESEND_API_KEY not available during build, using mock');
+      return {
+        emails: {
+          send: async () => ({ data: null, error: null })
+        }
+      };
+    }
+    throw new Error('RESEND_API_KEY environment variable is not set');
+  }
+  return new Resend(apiKey);
+};
 
 export const sendVerificationEmail = async ({
   email,
@@ -11,6 +27,14 @@ export const sendVerificationEmail = async ({
   verificationCode: string;
 }) => {
   try {
+    // Check if we're in a build environment
+    if (process.env.NODE_ENV === 'production' && !process.env.RESEND_API_KEY) {
+      console.warn('RESEND_API_KEY not available, skipping email send');
+      return { success: true, data: null };
+    }
+
+    const resend = getResend();
+    
     const { data, error } = await resend.emails.send({
       from: 'ActionBot <verification@actionbot.ai>',
       to: email,

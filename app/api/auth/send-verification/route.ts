@@ -18,7 +18,16 @@ export async function POST(req: Request) {
     const verificationCode = generateVerificationCode();
 
     // 🛠️ TODO: Store this code in Supabase (or cache) with expiration
-    await sendVerificationEmail({ email, verificationCode });
+    try {
+      await sendVerificationEmail({ email, verificationCode });
+    } catch (error) {
+      // If Resend is not configured, still return success in development
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Resend not configured, but continuing in development mode');
+      } else {
+        throw error;
+      }
+    }
 
     return NextResponse.json({
       success: true,
