@@ -134,7 +134,7 @@ export default function DropdownNavbar() {
       items: [
         { label: "Features", href: "/features", description: "Key capabilities" },
         { label: "Pricing", href: "/pricing", description: "Choose your plan" },
-        { label: "Integrations", href: "/integrations", description: "Connect your tools" },
+        { label: "Integrations", href: "/integrations-showcase", description: "Connect your tools" },
         { label: "Changelog", href: "/changelog", description: "See what's new" },
         { label: "Roadmap", href: "/roadmap", description: "Our future plans" },
         { label: "Beta Program", href: "/beta", description: "Get early access" }

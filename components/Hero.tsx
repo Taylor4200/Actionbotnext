@@ -5,6 +5,7 @@ import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { Zap, Mail, Calendar, Code, User2, Clock, Bot } from "lucide-react";
 import GlowButton from "@/components/ui/GlowButton";
 import ParticlesBackground from "@/components/ui/ParticlesBackground";
+import { ClientOnly } from "@/components/ui/ClientOnly";
 
 // Fixed TypeWriter component with proper gradient and cursor
 function TypeWriter({ text, className }: { text: string, className: string }) {
@@ -179,118 +180,120 @@ export default function Hero() {
   ];
 
   return (
-    <section id="home" className="relative pt-32 pb-20 overflow-hidden bg-black">
-      <ParticlesBackground />
-      
-      {/* Floating icons */}
-      <div className="absolute left-[5%] top-1/4 hidden md:block">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={floatingIcon}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              y: 0,
-              filter: "drop-shadow(0 0 8px rgba(109, 40, 217, 0.5))" 
-            }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-br from-[#262626] to-[#171717] text-purple-500 w-14 h-14 rounded-2xl flex items-center justify-center border border-gray-800"
-          >
-            {icons[floatingIcon]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <div className="absolute right-[5%] top-1/3 hidden md:block">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={floatingIcon}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: 1, 
-              y: 0, 
-              filter: "drop-shadow(0 0 8px rgba(79, 70, 229, 0.5))" 
-            }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-gradient-to-br from-[#262626] to-[#171717] text-indigo-500 w-12 h-12 rounded-2xl flex items-center justify-center border border-gray-800"
-          >
-            {icons[(floatingIcon + 1) % 3]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ 
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-              delay: 0.1
-            }}
-            className="inline-flex items-center bg-purple-900/20 text-purple-400 text-sm px-3 py-1 rounded-full mb-6"
-          >
-            <Zap className="w-4 h-4 mr-2" />
-            AI-powered automation for everyone
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.8, 
-              delay: 0.2,
-              type: "spring" 
-            }}
-            className="text-4xl md:text-7xl font-bold mb-6 tracking-tight leading-[1.3]"
-          >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300">
-              Your AI Assistant That
-            </span>
-            <br />
-            <TypeWriter 
-              text="Actually Does Stuff" 
-              className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500"
-            />
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto"
-          >
-            ActionBot connects to your favorite apps and executes real-world tasks through APIs and webhooks. Schedule meetings, send emails, and post content — all automatically.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
-          >
-            <GlowButton href="/signup" size="lg">
-              Launch My Bot
-            </GlowButton>
-            <motion.a 
-              href="#demo"
-              whileHover={{ scale: 1.03, backgroundColor: "rgba(38, 38, 38, 1)" }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              className="bg-[#171717] border border-gray-700 text-white font-semibold px-8 py-4 rounded-xl transition duration-300 hover:bg-[#262626] hover:border-gray-600 flex items-center justify-center"
+    <ClientOnly>
+      <section id="home" className="relative pt-32 pb-20 overflow-hidden bg-black">
+        <ParticlesBackground />
+        
+        {/* Floating icons */}
+        <div className="absolute left-[5%] top-1/4 hidden md:block">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={floatingIcon}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                filter: "drop-shadow(0 0 8px rgba(109, 40, 217, 0.5))" 
+              }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="bg-gradient-to-br from-[#262626] to-[#171717] text-purple-500 w-14 h-14 rounded-2xl flex items-center justify-center border border-gray-800"
             >
-              Watch Demo
-            </motion.a>
-          </motion.div>
-          
-          {/* Hero Visual - Interactive Console */}
-          <ConsoleAnimation />
+              {icons[floatingIcon]}
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
-    </section>
+
+        <div className="absolute right-[5%] top-1/3 hidden md:block">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={floatingIcon}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0, 
+                filter: "drop-shadow(0 0 8px rgba(79, 70, 229, 0.5))" 
+              }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-gradient-to-br from-[#262626] to-[#171717] text-indigo-500 w-12 h-12 rounded-2xl flex items-center justify-center border border-gray-800"
+            >
+              {icons[(floatingIcon + 1) % 3]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: 0.1
+              }}
+              className="inline-flex items-center bg-purple-900/20 text-purple-400 text-sm px-3 py-1 rounded-full mb-6"
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              AI-powered automation for everyone
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.2,
+                type: "spring" 
+              }}
+              className="text-4xl md:text-7xl font-bold mb-6 tracking-tight leading-[1.3]"
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-300">
+                Your AI Assistant That
+              </span>
+              <br />
+              <TypeWriter 
+                text="Actually Does Stuff" 
+                className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500"
+              />
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto"
+            >
+              ActionBot connects to your favorite apps and executes real-world tasks through APIs and webhooks. Schedule meetings, send emails, and post content — all automatically.
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            >
+              <GlowButton href="/signup" size="lg">
+                Launch My Bot
+              </GlowButton>
+              <motion.a 
+                href="#demo"
+                whileHover={{ scale: 1.03, backgroundColor: "rgba(38, 38, 38, 1)" }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+                className="bg-[#171717] border border-gray-700 text-white font-semibold px-8 py-4 rounded-xl transition duration-300 hover:bg-[#262626] hover:border-gray-600 flex items-center justify-center"
+              >
+                Watch Demo
+              </motion.a>
+            </motion.div>
+            
+            {/* Hero Visual - Interactive Console */}
+            <ConsoleAnimation />
+          </div>
+        </div>
+      </section>
+    </ClientOnly>
   );
 }
